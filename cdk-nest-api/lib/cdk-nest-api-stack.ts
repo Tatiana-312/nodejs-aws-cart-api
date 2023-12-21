@@ -10,7 +10,7 @@ export class CdkNestApiStack extends cdk.Stack {
     const nestJsLambda = new Function(this, 'CustomerCrudLambda', {
       runtime: Runtime.NODEJS_18_X,
       handler: 'main.handler',
-      code: Code.fromAsset('dist/src'),
+      code: Code.fromAsset('dist'),
     });
 
     const restApi = new RestApi(this, 'CustomerLambdaApi', {

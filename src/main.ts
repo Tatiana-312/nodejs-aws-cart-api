@@ -17,7 +17,7 @@ async function bootstrap(): Promise<Handler> {
   });
   app.use(helmet());
 
-  await app.listen(port);
+  await app.init();
 
   const expressApp = app.getHttpAdapter().getInstance();
   return serverlessExpress({ app: expressApp });
