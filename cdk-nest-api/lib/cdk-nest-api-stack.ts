@@ -1,16 +1,23 @@
 import * as cdk from 'aws-cdk-lib';
+import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { Code, Runtime, Function } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class CdkNestApiStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    const nestJsLambda = new Function(this, 'CustomerCrudLambda', {
+      runtime: Runtime.NODEJS_18_X,
+      handler: 'main.handler',
+      code: Code.fromAsset('dist/src'),
+    });
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'CdkNestApiQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    const restApi = new RestApi(this, 'CustomerLambdaApi', {
+      restApiName: 'NestJS REST API',
+    });
+
+    const proxyResource = restApi.root.addResource('{proxy+}'); // Catch-all for any subpath
+    proxyResource.addMethod('ANY', new LambdaIntegration(nestJsLambda));
   }
 }
