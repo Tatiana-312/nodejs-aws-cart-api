@@ -1,7 +1,7 @@
 -- create extension if not exists "uuid-ossp";
 create table
     carts (
-        id uuid primary key,
+        id uuid primary key default uuid_generate_v4(),
         user_id uuid not null,
         created_at date not null default now(),
         updated_at date not null default now(),
@@ -13,7 +13,7 @@ create table
         cart_id uuid,
         product_id uuid default uuid_generate_v4(),
         count integer,
-        foreign key ("cart_id") references "carts" ("id")
+        foreign key ("cart_id") references "carts" ("id") on delete cascade
     );
 
 insert into
