@@ -1,5 +1,6 @@
 import * as cdk from 'aws-cdk-lib';
 import { LambdaIntegration, RestApi } from 'aws-cdk-lib/aws-apigateway';
+import { PolicyStatement } from 'aws-cdk-lib/aws-iam';
 import { Code, Runtime, Function } from 'aws-cdk-lib/aws-lambda';
 import { Construct } from 'constructs';
 import 'dotenv/config';
@@ -7,7 +8,7 @@ import 'dotenv/config';
 const { RDS_HOSTNAME, RDS_PORT, RDS_USERNAME, RDS_PASSWORD, RDS_DB_NAME } =
   process.env;
 
-export class CdkNestApiStack extends cdk.Stack {
+export class CartServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
@@ -22,6 +23,13 @@ export class CdkNestApiStack extends cdk.Stack {
         RDS_PASSWORD: RDS_PASSWORD!,
         RDS_DB_NAME: RDS_DB_NAME!,
       },
+      timeout: cdk.Duration.seconds(10),
+      initialPolicy: [
+        new PolicyStatement({
+          actions: ['rds-db:connect', 'rds-db:executeStatement'],
+          resources: ['*'],
+        }),
+      ],
     });
 
     const restApi = new RestApi(this, 'CustomerLambdaApi', {

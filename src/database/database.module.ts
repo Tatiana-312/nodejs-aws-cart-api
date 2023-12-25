@@ -16,6 +16,7 @@ const { RDS_HOSTNAME, RDS_PORT, RDS_USERNAME, RDS_PASSWORD, RDS_DB_NAME } =
       password: RDS_PASSWORD,
       database: RDS_DB_NAME,
       entities: [CartEntity, CartItemEntity],
+      logging: true,
       ssl: {
         rejectUnauthorized: false,
       },
