@@ -17,22 +17,23 @@ export class CartEntity {
   @Column({ name: 'user_id', type: 'uuid', nullable: false })
   userId: string;
 
-  @Column({
-    name: 'created_at',
-    nullable: false,
-  })
+  @Column({ name: 'created_at', type: 'date' })
   createdAt: string;
 
-  @Column({
-    name: 'updated_at',
-    nullable: false,
-  })
+  @Column({ name: 'updated_at', type: 'date' })
   updatedAt: string;
 
-  @Column({ name: 'status' })
+  @Column({
+    name: 'status',
+    type: 'enum',
+    enum: CartStatuses,
+    default: CartStatuses.OPEN,
+  })
   status: CartStatuses;
 
-  @OneToMany(() => CartItemEntity, (cartItem) => cartItem.cartId)
+  @OneToMany(() => CartItemEntity, (cartItem) => cartItem.cartId, {
+    eager: true,
+  })
   @JoinColumn({ name: 'id', referencedColumnName: 'cart_id' })
   items: CartItemEntity[];
 }
