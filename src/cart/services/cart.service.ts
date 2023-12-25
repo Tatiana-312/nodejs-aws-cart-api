@@ -14,7 +14,7 @@ export class CartService {
   ) {}
 
   async findByUserId(userId: string): Promise<Cart> {
-    let cartEntity: CartEntity = await this.cartRepository.findOneBy({
+    const cartEntity: CartEntity = await this.cartRepository.findOneBy({
       userId,
     });
 
@@ -86,6 +86,14 @@ export class CartService {
     await this.cartRepository.update({ userId }, updatedCart);
 
     return await this.findByUserId(userId);
+  }
+
+  async setOrdered(userId: string): Promise<void> {
+    const updatedCart = {
+      updatedAt: new Date().toISOString().split('T')[0],
+      status: CartStatuses.ORDERED,
+    };
+    await this.cartRepository.update({ userId }, updatedCart);
   }
 
   async removeByUserId(userId: string): Promise<void> {

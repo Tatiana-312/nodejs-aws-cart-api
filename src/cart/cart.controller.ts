@@ -28,7 +28,6 @@ export class CartController {
   @UseGuards(BasicAuthGuard)
   @Get()
   async findUserCart(@Req() req: AppRequest) {
-    console.log('req', req);
     const cart = await this.cartService.findOrCreateByUserId(
       getUserIdFromRequest(req),
     );
@@ -87,16 +86,16 @@ export class CartController {
       };
     }
 
-    const { id: cartId, items } = cart;
-    const total = calculateCartTotal(cart);
-    const order = this.orderService.create({
+    const { id: cartId } = cart;
+    // const total = calculateCartTotal(cart);
+    const order = await this.orderService.create({
       ...body, // TODO: validate and pick only necessary data
       userId,
       cartId,
-      items,
-      total,
+      // total,
     });
-    await this.cartService.removeByUserId(userId);
+
+    await this.cartService.setOrdered(userId);
 
     return {
       statusCode: HttpStatus.OK,
