@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { v4 } from 'uuid';
 
 import { Order } from '../models';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -59,16 +58,18 @@ export class OrderService {
     return await this.findById(newOrder.id);
   }
 
-  // update(orderId, data) {
-  //   const order = this.findById(orderId);
+  async update(id, data): Promise<void> {
+    const order = await this.findById(id);
 
-  //   if (!order) {
-  //     throw new Error('Order does not exist.');
-  //   }
+    if (!order) {
+      throw new Error('Order does not exist.');
+    }
 
-  //   this.orders[orderId] = {
-  //     ...data,
-  //     id: orderId,
-  //   };
-  // }
+    const updatedOrder = {
+      ...data,
+      id,
+    };
+
+    await this.orderRepository.update({ id }, updatedOrder);
+  }
 }
