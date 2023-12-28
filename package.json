@@ -1,5 +1,5 @@
 {
-  "name": "rs-checkout-api",
+  "name": "cart-service-api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -7,7 +7,9 @@
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
-    "build": "nest build --webpack",
+    "build": "nest build",
+    "docker:build": "docker build --target production -t cart-nest-api:latest .",
+    "docker:run": "docker run -p 80:4000 cart-nest-api",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
