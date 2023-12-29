@@ -51,4 +51,4 @@ ENV RDS_PASSWORD=${RDS_PASSWORD}
 COPY --chown=node:node --from=build /app/node_modules ./node_modules
 COPY --chown=node:node --from=build /app/dist ./dist
 
-CMD ["node", "dist/src/main.js"]
+CMD ["node", "dist/main.js"]
