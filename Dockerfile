@@ -31,6 +31,7 @@ COPY --chown=node:node . .
 RUN npm run build
 
 ENV NODE_ENV="production"
+ENV PORT=4000
 
 RUN npm ci --only=production && npm cache clean --force
 
@@ -50,5 +51,7 @@ ENV RDS_PASSWORD=${RDS_PASSWORD}
 
 COPY --chown=node:node --from=build /app/node_modules ./node_modules
 COPY --chown=node:node --from=build /app/dist ./dist
+
+EXPOSE 4000
 
 CMD ["node", "dist/main.js"]
